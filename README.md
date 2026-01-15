@@ -66,16 +66,6 @@ go install github.com/ndraiman/trash-guard/cli@latest
 mv $(go env GOPATH)/bin/cli $(go env GOPATH)/bin/trash
 ```
 
-### Homebrew (macOS only)
-
-Alternatively, on macOS you can use the Homebrew version:
-
-```bash
-brew install trash
-```
-
-> **Note:** The pre-built binaries or building from source is recommended as they're cross-platform and maintained alongside this plugin.
-
 ## Trash CLI
 
 This repo includes a cross-platform `trash` CLI written in Go that moves files to the system Trash instead of permanently deleting them.
