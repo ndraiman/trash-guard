@@ -2,21 +2,87 @@
 
 A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin that blocks dangerous `rm -rf` commands and suggests using the `trash` CLI for safer file deletion.
 
+**Now includes a built-in cross-platform `trash` CLI!**
+
 ## Why?
 
 `rm -rf` permanently deletes files with no way to recover them. The `trash` CLI moves files to the system Trash instead, allowing recovery if needed.
 
 This plugin intercepts bash commands before execution and blocks any that contain dangerous recursive+force delete patterns.
 
-## Installation
+## Trash CLI
 
-### Prerequisites
+This repo includes a cross-platform `trash` CLI written in Go that moves files to the system Trash instead of permanently deleting them.
 
-Install the `trash` CLI:
+### Supported Platforms
+
+- **macOS**: Uses `~/.Trash` folder
+- **Linux**: Uses freedesktop.org trash spec (`~/.local/share/Trash`)
+
+### Installation
+
+#### Option 1: Build from Source
+
+```bash
+# Clone the repo
+git clone https://github.com/ndraiman/trash-guard
+cd trash-guard/cli
+
+# Build
+go build -o trash .
+
+# Install to your PATH (example: /usr/local/bin)
+sudo mv trash /usr/local/bin/
+```
+
+#### Option 2: Go Install
+
+```bash
+go install github.com/ndraiman/trash-guard/cli@latest
+# Rename the binary
+mv $(go env GOPATH)/bin/cli $(go env GOPATH)/bin/trash
+```
+
+#### Option 3: Homebrew (macOS only, alternative)
+
+If you prefer the Homebrew version instead:
 
 ```bash
 brew install trash
 ```
+
+### Usage
+
+```bash
+# Move a single file to trash
+trash file.txt
+
+# Move a folder to trash
+trash folder/
+
+# Move multiple items to trash
+trash file1.txt file2.txt folder/
+
+# Show help
+trash --help
+
+# Show version
+trash --version
+```
+
+### Features
+
+- ✅ Cross-platform (macOS and Linux)
+- ✅ Handles name conflicts (appends counter if file exists in trash)
+- ✅ Linux: Creates `.trashinfo` files per freedesktop.org spec
+- ✅ Handles cross-device moves (copy + delete fallback)
+- ✅ Proper error handling and helpful messages
+
+## Claude Code Plugin Installation
+
+### Prerequisites
+
+Install the `trash` CLI (see above or use `brew install trash`).
 
 ### Install the Plugin
 

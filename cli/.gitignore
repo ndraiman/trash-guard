@@ -1,0 +1,13 @@
+# Binaries
+trash
+trash.exe
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test files
+*.test
+
+# Go build cache
+*.out
