@@ -1,0 +1,12 @@
+{
+  "name": "trash-guard",
+  "version": "1.0.0",
+  "description": "Blocks rm -rf commands and suggests using trash CLI instead for safer file deletion",
+  "author": {
+    "name": "Netanel Draiman",
+    "url": "https://github.com/ndraiman"
+  },
+  "repository": "https://github.com/ndraiman/trash-guard",
+  "license": "MIT",
+  "keywords": ["safety", "rm", "trash", "delete", "protection", "hook"]
+}
