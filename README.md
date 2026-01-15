@@ -1,5 +1,9 @@
 # trash-guard
 
+[![Release](https://img.shields.io/github/v/release/ndraiman/trash-guard?label=release)](https://github.com/ndraiman/trash-guard/releases)
+[![Test](https://github.com/ndraiman/trash-guard/actions/workflows/test.yml/badge.svg)](https://github.com/ndraiman/trash-guard/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin that blocks dangerous `rm -rf` commands and suggests using the `trash` CLI for safer file deletion.
 
 **Now includes a built-in cross-platform `trash` CLI!**
@@ -10,6 +14,68 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin that bloc
 
 This plugin intercepts bash commands before execution and blocks any that contain dangerous recursive+force delete patterns.
 
+## Installation
+
+### Quick Install (Recommended)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install.sh | bash
+```
+
+Install a specific version:
+```bash
+curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install.sh | VERSION=v1.0.0 bash
+```
+
+Install to custom directory (no sudo needed):
+```bash
+curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install.sh | INSTALL_DIR=~/.local/bin bash
+```
+
+### Manual Download
+
+Download the appropriate binary from [Releases](https://github.com/ndraiman/trash-guard/releases):
+
+| Platform | Architecture | Download |
+|----------|--------------|----------|
+| macOS    | Apple Silicon (M1/M2/M3) | [trash-darwin-arm64](https://github.com/ndraiman/trash-guard/releases/latest/download/trash-darwin-arm64) |
+| macOS    | Intel | [trash-darwin-amd64](https://github.com/ndraiman/trash-guard/releases/latest/download/trash-darwin-amd64) |
+| Linux    | x86_64 | [trash-linux-amd64](https://github.com/ndraiman/trash-guard/releases/latest/download/trash-linux-amd64) |
+| Linux    | ARM64 | [trash-linux-arm64](https://github.com/ndraiman/trash-guard/releases/latest/download/trash-linux-arm64) |
+
+Then:
+```bash
+chmod +x trash-*
+sudo mv trash-* /usr/local/bin/trash
+```
+
+### Build from Source
+
+```bash
+git clone https://github.com/ndraiman/trash-guard.git
+cd trash-guard/cli
+go build -o trash main.go
+sudo mv trash /usr/local/bin/
+```
+
+### Go Install
+
+```bash
+go install github.com/ndraiman/trash-guard/cli@latest
+# Rename the binary
+mv $(go env GOPATH)/bin/cli $(go env GOPATH)/bin/trash
+```
+
+### Homebrew (macOS only)
+
+Alternatively, on macOS you can use the Homebrew version:
+
+```bash
+brew install trash
+```
+
+> **Note:** The pre-built binaries or building from source is recommended as they're cross-platform and maintained alongside this plugin.
+
 ## Trash CLI
 
 This repo includes a cross-platform `trash` CLI written in Go that moves files to the system Trash instead of permanently deleting them.
@@ -18,40 +84,6 @@ This repo includes a cross-platform `trash` CLI written in Go that moves files t
 
 - **macOS**: Uses `~/.Trash` folder
 - **Linux**: Uses freedesktop.org trash spec (`~/.local/share/Trash`)
-
-### Installation
-
-#### Option 1: Build from Source (Recommended)
-
-```bash
-# Clone the repo
-git clone https://github.com/ndraiman/trash-guard
-cd trash-guard/cli
-
-# Build
-go build -o trash .
-
-# Install to your PATH (example: /usr/local/bin)
-sudo mv trash /usr/local/bin/
-```
-
-#### Option 2: Go Install
-
-```bash
-go install github.com/ndraiman/trash-guard/cli@latest
-# Rename the binary
-mv $(go env GOPATH)/bin/cli $(go env GOPATH)/bin/trash
-```
-
-#### Option 3: Homebrew (macOS only)
-
-Alternatively, on macOS you can use the Homebrew version:
-
-```bash
-brew install trash
-```
-
-> **Note:** The built-in Go CLI is recommended as it's cross-platform and maintained alongside this plugin.
 
 ### Usage
 
@@ -84,7 +116,7 @@ trash --version
 
 ### Prerequisites
 
-Install the `trash` CLI using one of the methods above (building from source is recommended).
+Install the `trash` CLI using one of the methods above (the quick install is recommended).
 
 ### Install the Plugin
 

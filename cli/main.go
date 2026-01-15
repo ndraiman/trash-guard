@@ -11,9 +11,8 @@ import (
 	"time"
 )
 
-const (
-	version = "1.0.0"
-)
+// version is set via -ldflags at build time
+var version = "dev"
 
 func main() {
 	if len(os.Args) < 2 {
@@ -28,7 +27,7 @@ func main() {
 	}
 
 	if os.Args[1] == "--version" || os.Args[1] == "-v" {
-		fmt.Printf("trash v%s\n", version)
+		fmt.Printf("trash %s\n", version)
 		os.Exit(0)
 	}
 

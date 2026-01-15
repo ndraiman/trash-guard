@@ -1,3 +1,3 @@
-module github.com/ndraiman/trash-guard/cli
+module github.com/ndraiman/trash-guard
 
-go 1.21
+go 1.22
