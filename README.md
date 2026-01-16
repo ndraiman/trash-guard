@@ -11,13 +11,12 @@ A coding agent plugin that blocks dangerous `rm -rf` commands and suggests using
 
 ## Installation
 
-### Using add-skill (Recommended)
+### Plugin Marketplace (Recommended)
 
 ```bash
-npx add-skill ndraiman/trash-guard
+/plugin marketplace add ndraiman/trash-guard
+/plugin install trash-guard@ndraiman-trash-guard
 ```
-
-Works with: [Claude Code](https://docs.anthropic.com/en/docs/claude-code) • [OpenCode](https://opencode.ai) • [Codex](https://openai.com/codex) • [Cursor](https://cursor.com)
 
 ### Manual (Claude Code)
 
@@ -25,6 +24,16 @@ Works with: [Claude Code](https://docs.anthropic.com/en/docs/claude-code) • [O
 git clone https://github.com/ndraiman/trash-guard.git ~/.claude-plugins/trash-guard
 claude --plugin-dir ~/.claude-plugins/trash-guard
 ```
+
+### Using add-skill (Skill Only - No Hooks)
+
+```bash
+npx add-skill ndraiman/trash-guard
+```
+
+Works with: [Claude Code](https://docs.anthropic.com/en/docs/claude-code) • [OpenCode](https://opencode.ai) • [Codex](https://openai.com/codex) • [Cursor](https://cursor.com)
+
+**Note**: This installs the skill documentation only and does not include the protective hooks.
 
 ## What it Blocks
 
