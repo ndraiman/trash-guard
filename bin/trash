@@ -10,24 +10,28 @@ if [[ "$OSTYPE" == darwin* ]]; then
         exec /usr/bin/trash "$@"
     else
         echo "Error: macOS trash command not found. Requires macOS 15 (Sequoia) or later." >&2
-        echo "For older macOS, install via: brew install trash" >&2
+        echo "" >&2
+        echo "Install trash-guard CLI:" >&2
+        echo "  curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install-cli.sh | bash" >&2
         exit 1
     fi
 fi
 
-# Linux - use gio trash (part of GLib/GNOME)
+# Linux - use gio trash if available, otherwise suggest our CLI
 if [[ "$OSTYPE" == linux* ]]; then
     if command -v gio &>/dev/null; then
         exec gio trash "$@"
     else
-        echo "Error: gio command not found." >&2
-        echo "Install GLib utilities:" >&2
-        echo "  Ubuntu/Debian: sudo apt install glib-2.0" >&2
-        echo "  Fedora/RHEL:   sudo dnf install glib2" >&2
-        echo "  Arch:          sudo pacman -S glib2" >&2
+        echo "Error: No trash command available." >&2
+        echo "" >&2
+        echo "Install trash-guard CLI:" >&2
+        echo "  curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install-cli.sh | bash" >&2
         exit 1
     fi
 fi
 
 echo "Error: Unsupported OS ($OSTYPE)" >&2
+echo "" >&2
+echo "Install trash-guard CLI:" >&2
+echo "  curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install-cli.sh | bash" >&2
 exit 1

@@ -24,42 +24,29 @@ trash folder/
 trash file1.txt file2.txt folder/
 ```
 
-For older macOS versions, install via Homebrew:
+For older macOS versions, install our CLI:
 ```bash
-brew install trash
+curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install-cli.sh | bash
 ```
 
 ### Linux
 
-Linux uses **`gio trash`**, part of the GLib utilities (pre-installed on most desktop distributions):
+Most desktop Linux distributions include **`gio trash`** (part of GLib). If available, our wrapper uses it automatically.
 
+If `gio` is not available, install our CLI:
 ```bash
-# Move files to trash
-gio trash file.txt
-gio trash folder/
-
-# List trashed files
-gio list trash://
-
-# Empty trash
-gio trash --empty
+curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install-cli.sh | bash
 ```
 
-If `gio` is not installed:
-```bash
-# Ubuntu/Debian
-sudo apt install libglib2.0-bin
+Our CLI provides:
+- Cross-platform support (macOS and Linux)
+- Freedesktop.org trash spec compliance on Linux
+- Handles name conflicts (appends counter if file exists in trash)
+- Cross-device moves (copy + delete fallback)
 
-# Fedora/RHEL
-sudo dnf install glib2
+## Wrapper Script
 
-# Arch
-sudo pacman -S glib2
-```
-
-## Wrapper Script (Optional)
-
-For a consistent `trash` command across platforms, install our wrapper:
+For a consistent `trash` command that delegates to the right tool:
 
 ```bash
 # Download wrapper
@@ -71,17 +58,18 @@ echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
 ```
 
 The wrapper automatically delegates to:
-- macOS: `/usr/bin/trash` (built-in)
-- Linux: `gio trash`
+- **macOS 15+**: `/usr/bin/trash` (built-in)
+- **Linux**: `gio trash` (if available)
+- **Fallback**: Suggests installing our CLI
 
-## Claude Code Plugin Installation
+## Claude Code Plugin
 
 ### Prerequisites
 
 Ensure you have a working `trash` command:
 - **macOS 15+**: Built-in ✓
-- **macOS <15**: `brew install trash`
-- **Linux**: `gio trash` (usually pre-installed)
+- **macOS <15**: Install our CLI (see above)
+- **Linux**: `gio trash` or install our CLI
 
 ### Install the Plugin
 
@@ -129,16 +117,6 @@ If you prefer not to use the plugin system, add this to your `~/.claude/settings
     ]
   }
 }
-```
-
-And add to your `CLAUDE.md`:
-
-```markdown
-## REQUIRED
-
-- **NEVER use `rm -rf`** - it's blocked by the trash-guard hook for safety
-- Use `trash` instead: `trash folder-name` or `trash file.txt`
-  - Works exactly like `rm -rf` but moves to Trash instead of permanent deletion
 ```
 
 ## License
