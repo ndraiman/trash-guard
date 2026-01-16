@@ -85,6 +85,33 @@ git clone https://github.com/ndraiman/trash-guard.git ~/.claude-plugins/trash-gu
 claude --plugin-dir ~/.claude-plugins/trash-guard
 ```
 
+## Agent Skill (add-skill)
+
+Install trash-guard as an agent skill using [add-skill](https://github.com/vercel-labs/add-skill):
+
+```bash
+npx add-skill ndraiman/trash-guard
+```
+
+This works with multiple coding agents:
+- [OpenCode](https://opencode.ai)
+- [Claude Code](https://claude.ai/code)
+- [Codex](https://developers.openai.com/codex)
+- [Cursor](https://cursor.com)
+- [Antigravity](https://antigravity.google)
+
+Options:
+```bash
+# Install globally (available across all projects)
+npx add-skill ndraiman/trash-guard --global
+
+# Install for specific agents
+npx add-skill ndraiman/trash-guard --agent claude-code --agent cursor
+
+# Non-interactive (CI/CD friendly)
+npx add-skill ndraiman/trash-guard -y -g
+```
+
 ## What it Blocks
 
 The plugin blocks these patterns:
