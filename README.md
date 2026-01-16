@@ -41,8 +41,8 @@ The plugin requires a `trash` command. Most systems have one:
 | Platform | Command | Notes |
 |----------|---------|-------|
 | macOS 15+ | `/usr/bin/trash` | Built-in ✓ |
-| macOS <15 | Install wrapper | No built-in trash |
 | Linux | `gio trash` | Pre-installed on most desktops |
+| macOS <15 / Linux (no gio) | Install wrapper | No built-in trash |
 
 ### Wrapper Script (Optional)
 
