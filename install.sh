@@ -1,85 +1,46 @@
 #!/bin/bash
-set -euo pipefail
+# trash-guard wrapper installer
+# Installs the wrapper script that delegates to native trash commands
 
-# Configuration
+set -e
+
 REPO="ndraiman/trash-guard"
-BINARY_NAME="trash"
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
+WRAPPER_URL="https://raw.githubusercontent.com/${REPO}/main/bin/trash"
 
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-info() { echo -e "${GREEN}[INFO]${NC} $1"; }
-warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
-error() { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
-
-# Detect OS
-detect_os() {
-    case "$(uname -s)" in
-        Darwin) echo "darwin" ;;
-        Linux)  echo "linux" ;;
-        *)      error "Unsupported OS: $(uname -s). Only macOS and Linux are supported." ;;
-    esac
-}
-
-# Detect Architecture
-detect_arch() {
-    case "$(uname -m)" in
-        x86_64|amd64)  echo "amd64" ;;
-        arm64|aarch64) echo "arm64" ;;
-        *)             error "Unsupported architecture: $(uname -m)" ;;
-    esac
-}
-
-# Get latest release version
-get_latest_version() {
-    curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" | grep '"tag_name"' | cut -d'"' -f4
-}
+info() { echo "[INFO] $*"; }
+warn() { echo "[WARN] $*"; }
+error() { echo "[ERROR] $*" >&2; exit 1; }
 
 main() {
-    info "Installing ${BINARY_NAME}..."
+    info "Installing trash-guard wrapper..."
     
-    OS=$(detect_os)
-    ARCH=$(detect_arch)
-    VERSION="${VERSION:-$(get_latest_version)}"
+    TMP_FILE=$(mktemp)
     
-    info "Detected: ${OS}/${ARCH}"
-    info "Version: ${VERSION}"
+    info "Downloading wrapper script..."
+    curl -fsSL "$WRAPPER_URL" -o "$TMP_FILE" || error "Download failed"
+    chmod +x "$TMP_FILE"
     
-    # Construct download URL
-    BINARY="trash-${OS}-${ARCH}"
-    URL="https://github.com/${REPO}/releases/download/${VERSION}/${BINARY}"
+    info "Installing to ${INSTALL_DIR}/trash..."
     
-    # Create temp directory
-    TMP_DIR=$(mktemp -d)
-    trap "rm -rf ${TMP_DIR}" EXIT
-    
-    # Download binary
-    info "Downloading ${URL}..."
-    curl -fsSL "${URL}" -o "${TMP_DIR}/${BINARY_NAME}"
-    
-    # Verify download (optional: check SHA256)
-    if [ ! -s "${TMP_DIR}/${BINARY_NAME}" ]; then
-        error "Download failed or file is empty"
-    fi
-    
-    # Make executable
-    chmod +x "${TMP_DIR}/${BINARY_NAME}"
-    
-    # Install (may need sudo)
-    info "Installing to ${INSTALL_DIR}/${BINARY_NAME}..."
-    if [ -w "${INSTALL_DIR}" ]; then
-        mv "${TMP_DIR}/${BINARY_NAME}" "${INSTALL_DIR}/${BINARY_NAME}"
+    if [[ -w "$INSTALL_DIR" ]]; then
+        mv "$TMP_FILE" "${INSTALL_DIR}/trash"
     else
         warn "Need sudo to install to ${INSTALL_DIR}"
-        sudo mv "${TMP_DIR}/${BINARY_NAME}" "${INSTALL_DIR}/${BINARY_NAME}"
+        sudo mv "$TMP_FILE" "${INSTALL_DIR}/trash"
     fi
     
-    info "✓ ${BINARY_NAME} installed successfully!"
-    info "Run 'trash --version' to verify."
+    info "✓ trash-guard wrapper installed!"
+    
+    # Show what it delegates to
+    if [[ "$OSTYPE" == darwin* ]] && [[ -x /usr/bin/trash ]]; then
+        info "Will use: /usr/bin/trash (macOS built-in)"
+    elif [[ "$OSTYPE" == linux* ]] && command -v gio &>/dev/null; then
+        info "Will use: gio trash"
+    else
+        warn "No native trash command found."
+        info "Install CLI: curl -fsSL https://raw.githubusercontent.com/${REPO}/main/install-cli.sh | bash"
+    fi
 }
 
 main "$@"
