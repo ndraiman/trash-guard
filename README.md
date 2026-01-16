@@ -110,30 +110,36 @@ Install the `trash` CLI using one of the methods above (the quick install is rec
 
 ### Install the Plugin
 
-**Option 1: Clone and load with --plugin-dir**
+**Option 1: Install from GitHub (Recommended)**
+
+Add the trash-guard repository as a marketplace, then install the plugin:
+
+```bash
+# Inside Claude Code, run:
+/plugin marketplace add ndraiman/trash-guard
+
+# Then install the plugin:
+/plugin install trash-guard@ndraiman-trash-guard
+```
+
+Or use the CLI directly:
+```bash
+claude plugin install trash-guard@ndraiman-trash-guard
+```
+
+**Option 2: Development/Testing (--plugin-dir)**
+
+For local development or testing, use the `--plugin-dir` flag:
 
 ```bash
 # Clone the repo
-git clone https://github.com/ndraiman/trash-guard.git ~/.claude-plugins/trash-guard
+git clone https://github.com/ndraiman/trash-guard.git ~/trash-guard
 
-# Run Claude Code with the plugin
-claude --plugin-dir ~/.claude-plugins/trash-guard
+# Run Claude Code with the plugin loaded
+claude --plugin-dir ~/trash-guard
 ```
 
-To always load the plugin, add to your `~/.claude/settings.json`:
-```json
-{
-  "pluginDirs": ["~/.claude-plugins/trash-guard"]
-}
-```
-
-**Option 2: Project-level plugin**
-
-Clone into your project's `.claude/plugins/` directory:
-```bash
-git clone https://github.com/ndraiman/trash-guard.git .claude/plugins/trash-guard
-```
-Claude Code automatically loads plugins from `.claude/plugins/`.
+Note: The `--plugin-dir` flag is for development/testing only. For permanent installation, use Option 1.
 
 ## What it Blocks
 
