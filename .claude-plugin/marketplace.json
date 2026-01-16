@@ -14,7 +14,10 @@
       "author": {
         "name": "Netanel Draiman"
       },
-      "source": "https://github.com/ndraiman/trash-guard.git",
+      "source": {
+        "source": "github",
+        "repo": "ndraiman/trash-guard"
+      },
       "category": "security",
       "homepage": "https://github.com/ndraiman/trash-guard",
       "tags": ["safety", "rm", "trash", "delete", "protection", "hook"]
