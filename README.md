@@ -26,7 +26,7 @@ trash file1.txt file2.txt folder/
 
 For older macOS versions, install our CLI:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install-cli.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install.sh | bash
 ```
 
 ### Linux
@@ -35,7 +35,7 @@ Most desktop Linux distributions include **`gio trash`** (part of GLib). If avai
 
 If `gio` is not available, install our CLI:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install-cli.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install.sh | bash
 ```
 
 Our CLI provides:
