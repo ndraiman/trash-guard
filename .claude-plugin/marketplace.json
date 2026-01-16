@@ -1,17 +1,23 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "trash-guard",
+  "description": "A plugin marketplace for safer file deletion with trash-guard",
+  "owner": {
+    "name": "Netanel Draiman",
+    "email": "ndraiman@gmail.com"
+  },
   "plugins": [
     {
-      "id": "trash-guard",
       "name": "trash-guard",
       "description": "Blocks dangerous rm -rf commands and suggests using trash CLI instead for safer file deletion",
-      "author": {
-        "name": "Netanel Draiman",
-        "url": "https://github.com/ndraiman"
-      },
-      "repository": "https://github.com/ndraiman/trash-guard",
       "version": "1.0.0",
-      "license": "MIT",
-      "keywords": ["safety", "rm", "trash", "delete", "protection", "hook"]
+      "author": {
+        "name": "Netanel Draiman"
+      },
+      "source": "https://github.com/ndraiman/trash-guard.git",
+      "category": "security",
+      "homepage": "https://github.com/ndraiman/trash-guard",
+      "tags": ["safety", "rm", "trash", "delete", "protection", "hook"]
     }
   ]
 }
