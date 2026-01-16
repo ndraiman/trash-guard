@@ -1,0 +1,33 @@
+#!/bin/bash
+# trash-guard wrapper - delegates to native trash commands
+# https://github.com/ndraiman/trash-guard
+
+set -e
+
+# macOS 15+ has built-in trash command
+if [[ "$OSTYPE" == darwin* ]]; then
+    if [[ -x /usr/bin/trash ]]; then
+        exec /usr/bin/trash "$@"
+    else
+        echo "Error: macOS trash command not found. Requires macOS 15 (Sequoia) or later." >&2
+        echo "For older macOS, install via: brew install trash" >&2
+        exit 1
+    fi
+fi
+
+# Linux - use gio trash (part of GLib/GNOME)
+if [[ "$OSTYPE" == linux* ]]; then
+    if command -v gio &>/dev/null; then
+        exec gio trash "$@"
+    else
+        echo "Error: gio command not found." >&2
+        echo "Install GLib utilities:" >&2
+        echo "  Ubuntu/Debian: sudo apt install glib-2.0" >&2
+        echo "  Fedora/RHEL:   sudo dnf install glib2" >&2
+        echo "  Arch:          sudo pacman -S glib2" >&2
+        exit 1
+    fi
+fi
+
+echo "Error: Unsupported OS ($OSTYPE)" >&2
+exit 1

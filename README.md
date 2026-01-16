@@ -1,145 +1,101 @@
 # trash-guard
 
 [![Release](https://img.shields.io/github/v/release/ndraiman/trash-guard?label=release)](https://github.com/ndraiman/trash-guard/releases)
-[![Test](https://github.com/ndraiman/trash-guard/actions/workflows/test.yml/badge.svg)](https://github.com/ndraiman/trash-guard/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin that blocks dangerous `rm -rf` commands and suggests using the `trash` CLI for safer file deletion.
-
-**Now includes a built-in cross-platform `trash` CLI!**
+A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin that blocks dangerous `rm -rf` commands and suggests using `trash` for safer file deletion.
 
 ## Why?
 
-`rm -rf` permanently deletes files with no way to recover them. The `trash` CLI moves files to the system Trash instead, allowing recovery if needed.
+`rm -rf` permanently deletes files with no way to recover them. The `trash` command moves files to the system Trash instead, allowing recovery if needed.
 
 This plugin intercepts bash commands before execution and blocks any that contain dangerous recursive+force delete patterns.
 
-## Installation
+## Platform Support
 
-### Quick Install (Recommended)
+### macOS 15+ (Sequoia)
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install.sh | bash
-```
-
-Install a specific version:
-```bash
-curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install.sh | VERSION=v1.0.0 bash
-```
-
-Install to custom directory (no sudo needed):
-```bash
-curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/install.sh | INSTALL_DIR=~/.local/bin bash
-```
-
-### Manual Download
-
-Download the appropriate binary from [Releases](https://github.com/ndraiman/trash-guard/releases):
-
-| Platform | Architecture | Download |
-|----------|--------------|----------|
-| macOS    | Apple Silicon (M1/M2/M3) | [trash-darwin-arm64](https://github.com/ndraiman/trash-guard/releases/latest/download/trash-darwin-arm64) |
-| macOS    | Intel | [trash-darwin-amd64](https://github.com/ndraiman/trash-guard/releases/latest/download/trash-darwin-amd64) |
-| Linux    | x86_64 | [trash-linux-amd64](https://github.com/ndraiman/trash-guard/releases/latest/download/trash-linux-amd64) |
-| Linux    | ARM64 | [trash-linux-arm64](https://github.com/ndraiman/trash-guard/releases/latest/download/trash-linux-arm64) |
-
-Then:
-```bash
-chmod +x trash-*
-sudo mv trash-* /usr/local/bin/trash
-```
-
-### Build from Source
+macOS 15 introduced a **built-in `trash` command** at `/usr/bin/trash`. No installation needed!
 
 ```bash
-git clone https://github.com/ndraiman/trash-guard.git
-cd trash-guard/cli
-go build -o trash main.go
-sudo mv trash /usr/local/bin/
-```
-
-### Go Install
-
-```bash
-go install github.com/ndraiman/trash-guard/cli@latest
-# Rename the binary
-mv $(go env GOPATH)/bin/cli $(go env GOPATH)/bin/trash
-```
-
-## Trash CLI
-
-This repo includes a cross-platform `trash` CLI written in Go that moves files to the system Trash instead of permanently deleting them.
-
-### Supported Platforms
-
-- **macOS**: Uses `~/.Trash` folder
-- **Linux**: Uses freedesktop.org trash spec (`~/.local/share/Trash`)
-
-### Usage
-
-```bash
-# Move a single file to trash
+# Built-in - works out of the box
 trash file.txt
-
-# Move a folder to trash
 trash folder/
-
-# Move multiple items to trash
 trash file1.txt file2.txt folder/
-
-# Show help
-trash --help
-
-# Show version
-trash --version
 ```
 
-### Features
+For older macOS versions, install via Homebrew:
+```bash
+brew install trash
+```
 
-- ✅ Cross-platform (macOS and Linux)
-- ✅ Handles name conflicts (appends counter if file exists in trash)
-- ✅ Linux: Creates `.trashinfo` files per freedesktop.org spec
-- ✅ Handles cross-device moves (copy + delete fallback)
-- ✅ Proper error handling and helpful messages
+### Linux
+
+Linux uses **`gio trash`**, part of the GLib utilities (pre-installed on most desktop distributions):
+
+```bash
+# Move files to trash
+gio trash file.txt
+gio trash folder/
+
+# List trashed files
+gio list trash://
+
+# Empty trash
+gio trash --empty
+```
+
+If `gio` is not installed:
+```bash
+# Ubuntu/Debian
+sudo apt install libglib2.0-bin
+
+# Fedora/RHEL
+sudo dnf install glib2
+
+# Arch
+sudo pacman -S glib2
+```
+
+## Wrapper Script (Optional)
+
+For a consistent `trash` command across platforms, install our wrapper:
+
+```bash
+# Download wrapper
+curl -fsSL https://raw.githubusercontent.com/ndraiman/trash-guard/main/bin/trash -o ~/.local/bin/trash
+chmod +x ~/.local/bin/trash
+
+# Make sure ~/.local/bin is in your PATH
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+```
+
+The wrapper automatically delegates to:
+- macOS: `/usr/bin/trash` (built-in)
+- Linux: `gio trash`
 
 ## Claude Code Plugin Installation
 
 ### Prerequisites
 
-Install the `trash` CLI using one of the methods above (the quick install is recommended).
+Ensure you have a working `trash` command:
+- **macOS 15+**: Built-in ✓
+- **macOS <15**: `brew install trash`
+- **Linux**: `gio trash` (usually pre-installed)
 
 ### Install the Plugin
 
-**Option 1: Install from GitHub (Recommended)**
-
-Add the trash-guard repository as a marketplace, then install the plugin:
-
-```bash
-# Inside Claude Code, run:
+**Marketplace (recommended):**
+```
 /plugin marketplace add ndraiman/trash-guard
-
-# Then install the plugin:
 /plugin install trash-guard@ndraiman-trash-guard
 ```
 
-Or use the CLI directly:
+**Development/testing:**
 ```bash
-claude plugin install trash-guard@ndraiman-trash-guard
+git clone https://github.com/ndraiman/trash-guard.git ~/.claude-plugins/trash-guard
+claude --plugin-dir ~/.claude-plugins/trash-guard
 ```
-
-**Option 2: Development/Testing (--plugin-dir)**
-
-For local development or testing, use the `--plugin-dir` flag:
-
-```bash
-# Clone the repo
-git clone https://github.com/ndraiman/trash-guard.git ~/trash-guard
-
-# Run Claude Code with the plugin loaded
-claude --plugin-dir ~/trash-guard
-```
-
-Note: The `--plugin-dir` flag is for development/testing only. For permanent installation, use Option 1.
 
 ## What it Blocks
 
@@ -152,23 +108,6 @@ The plugin blocks these patterns:
 - `rm --recursive --force <path>`
 - `rm --force --recursive <path>`
 - Mixed variants like `rm -r --force` or `rm --recursive -f`
-
-## Using trash CLI
-
-The `trash` command works just like `rm` but moves to Trash:
-
-```bash
-# Instead of: rm -rf folder/
-trash folder/
-
-# Instead of: rm -rf file.txt
-trash file.txt
-
-# Multiple items
-trash file1.txt file2.txt folder/
-```
-
-Recover files by opening Trash and restoring them.
 
 ## Manual Setup (Alternative)
 
@@ -183,7 +122,7 @@ If you prefer not to use the plugin system, add this to your `~/.claude/settings
         "hooks": [
           {
             "type": "command",
-            "command": "/path/to/trash-guard.sh"
+            "command": "/path/to/trash-guard/hooks/pre-tool-use.sh"
           }
         ]
       }
