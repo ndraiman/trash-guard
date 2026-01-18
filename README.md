@@ -1,6 +1,7 @@
 # trash-guard
 
 [![Release](https://img.shields.io/github/v/release/ndraiman/trash-guard?label=release)](https://github.com/ndraiman/trash-guard/releases)
+[![npm](https://img.shields.io/npm/v/opencode-trash-guard?label=opencode)](https://www.npmjs.com/package/opencode-trash-guard)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A coding agent plugin that blocks dangerous `rm -rf` commands and suggests using `trash` for safer file deletion.
