@@ -1,6 +1,6 @@
 {
   "name": "opencode-trash-guard",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "OpenCode plugin that prevents destructive rm -rf commands",
   "main": "plugin.ts",
   "types": "plugin.ts",
