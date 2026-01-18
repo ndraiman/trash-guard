@@ -91,12 +91,31 @@ function rewriteRmToTrash(command: string, trashCommand: string): string | undef
   return [...prefix, trashCommand, ...targets].join(" ")
 }
 
+function detectTrashCommand(): string {
+  // User override takes priority
+  if (process.env.TRASH_GUARD_COMMAND) {
+    return process.env.TRASH_GUARD_COMMAND
+  }
+
+  // Platform-specific defaults
+  if (process.platform === "darwin") {
+    return "trash" // macOS 15+ has /usr/bin/trash, older versions need brew install trash
+  }
+
+  if (process.platform === "linux") {
+    return "gio trash" // Pre-installed on most Linux desktops (GNOME, etc.)
+  }
+
+  // Fallback
+  return "trash"
+}
+
 function getConfig(): Config {
   return {
     mode: parseMode(process.env.TRASH_GUARD_MODE),
     level: parseLevel(process.env.TRASH_GUARD_LEVEL),
     allowlist: parseAllowlist(process.env.TRASH_GUARD_ALLOWLIST),
-    trashCommand: process.env.TRASH_GUARD_COMMAND || "trash",
+    trashCommand: detectTrashCommand(),
   }
 }
 
