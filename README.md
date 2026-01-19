@@ -101,11 +101,11 @@ Set environment variables to customize:
 | Variable | Values | Default | Description |
 |----------|--------|---------|-------------|
 | `TRASH_GUARD_MODE` | `rewrite`, `deny` | `rewrite` | Rewrite to trash or block entirely |
-| `TRASH_GUARD_LEVEL` | `normal`, `strict` | `normal` | What patterns to catch |
+| `TRASH_GUARD_LEVEL` | `normal`, `strict` | `strict` | What patterns to catch |
 | `TRASH_GUARD_ALLOWLIST` | comma-separated | - | Patterns to skip |
 | `TRASH_GUARD_COMMAND` | path | `trash` | Custom trash binary |
 
 ### Detection levels
 
-- **normal**: `rm -rf`, `rm -fr`, `rm --recursive --force`
-- **strict**: Also `rm -r`, `rm *`, wildcards
+- **strict** (default): `rm -rf`, `rm -fr`, `rm --recursive --force`, plus `rm -r`, `rm *`, wildcards
+- **normal**: Only `rm -rf`, `rm -fr`, `rm --recursive --force`

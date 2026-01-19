@@ -16,7 +16,7 @@ function parseMode(value: string | undefined): Mode {
 }
 
 function parseLevel(value: string | undefined): Level {
-  return value === "strict" ? "strict" : "normal"
+  return value === "normal" ? "normal" : "strict"
 }
 
 function parseAllowlist(value: string | undefined): string[] {

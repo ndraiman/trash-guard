@@ -16,6 +16,8 @@ This skill is automatically active and should be used:
 
 ## What it Blocks
 
+Detection level defaults to **strict** (catches more patterns).
+
 The following patterns are blocked and should be replaced with `trash`:
 
 - `rm -rf <path>`

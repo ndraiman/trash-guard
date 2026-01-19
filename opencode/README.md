@@ -36,19 +36,19 @@ Set environment variables to customize behavior:
 | Variable | Values | Default | Description |
 |----------|--------|---------|-------------|
 | `TRASH_GUARD_MODE` | `rewrite`, `deny` | `rewrite` | Rewrite to trash or block entirely |
-| `TRASH_GUARD_LEVEL` | `normal`, `strict` | `normal` | What patterns to catch |
+| `TRASH_GUARD_LEVEL` | `normal`, `strict` | `strict` | What patterns to catch |
 | `TRASH_GUARD_ALLOWLIST` | comma-separated | - | Patterns to skip (e.g., `node_modules,dist`) |
 | `TRASH_GUARD_COMMAND` | path | `trash` | Custom trash binary |
 
 ### Detection levels
 
-**normal** (default):
+**normal**:
 - `rm -rf <path>`
 - `rm -fr <path>`
 - `rm -r -f <path>`
 - `rm --recursive --force <path>`
 
-**strict** (catches more):
+**strict** (default, catches more):
 - All of the above
 - `rm -r <path>` (recursive without force)
 - `rm *`, `rm *.js` (wildcards)
