@@ -1,5 +1,5 @@
 {
-  "description": "Block dangerous rm commands and suggest using trash CLI",
+  "description": "Rewrite rm commands to use trash CLI for safer deletion",
   "hooks": {
     "PreToolUse": [
       {
@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/trash-guard.sh"
+            "command": "bun run ${CLAUDE_PLUGIN_ROOT}/guard.ts"
           }
         ]
       }
